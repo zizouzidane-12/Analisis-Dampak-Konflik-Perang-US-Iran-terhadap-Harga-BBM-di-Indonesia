@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analisis Dampak Konflik US–Iran terhadap Harga BBM dan Perekonomian Indonesia</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --navy: #0d1b2a;
+    --navy-mid: #152438;
+    --navy-light: #1e3352;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #f5f0e8;
+    --cream-dark: #ede5d4;
+    --text-main: #1a1a2e;
+    --text-secondary: #3d4a5c;
+    --text-muted: #6b7a8d;
+    --border: #d4c9b0;
+    --accent-red: #c0392b;
+    --accent-green: #1a7a4a;
+    --accent-orange: #d68910;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--text-main);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--navy);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 32px 0;
+    border-right: 3px solid var(--gold);
+  }
+
+  .sidebar-brand {
+    padding: 0 24px 24px;
+    border-bottom: 1px solid var(--navy-light);
+  }
+
+  .sidebar-brand .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .sidebar-brand .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  .nav-section {
+    padding: 20px 24px 4px;
+  }
+
+  .nav-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2.5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 7px 12px;
+    margin: 2px 0;
+    border-radius: 4px;
+    color: rgba(245,240,232,0.65);
+    text-decoration: none;
+    font-size: 11.5px;
+    line-height: 1.4;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    background: var(--navy-light);
+    color: var(--cream);
+    border-left-color: var(--gold);
+  }
+
+  .nav-item .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    margin-right: 6px;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    max-width: 900px;
+    padding: 0 60px 80px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--navy);
+    margin: 0 -60px;
+    padding: 60px 60px 48px;
+    border-bottom: 4px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+
+  .cover-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--cream);
+    line-height: 1.3;
+    margin-bottom: 12px;
+    max-width: 700px;
+  }
+
+  .cover h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--gold-light);
+    font-style: italic;
+    font-weight: 400;
+    margin-bottom: 32px;
+  }
+
+  .cover-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .tag {
+    background: var(--navy-light);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 2px;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+
+  .cover-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding-top: 28px;
+    border-top: 1px solid var(--navy-light);
+  }
+
+  .info-item .info-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .info-item .info-value {
+    font-size: 12px;
+    color: rgba(245,240,232,0.8);
+    font-family: 'Source Serif 4', serif;
+  }
+
+  /* ── ABSTRACT ── */
+  .abstract-box {
+    background: var(--navy-mid);
+    border-left: 4px solid var(--gold);
+    padding: 28px 32px;
+    margin: 48px -20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .abstract-box .abstract-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .abstract-box p {
+    font-size: 14px;
+    color: rgba(245,240,232,0.85);
+    line-height: 1.8;
+  }
+
+  .keywords {
+    margin-top: 16px;
+    font-size: 12px;
+    color: rgba(201,168,76,0.8);
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding-top: 56px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    background: var(--navy);
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  .section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--navy);
+    margin: 32px 0 14px;
+    padding-left: 14px;
+    border-left: 3px solid var(--gold);
+  }
+
+  .section h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 20px 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .section p {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--text-main);
+    margin-bottom: 16px;
+  }
+
+  /* ── TABLES ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(13,27,42,0.08);
+  }
+
+  .table-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead {
+    background: var(--navy);
+  }
+
+  thead th {
+    color: var(--gold-light);
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+
+  tbody tr:nth-child(even) { background: rgba(201,168,76,0.05); }
+  tbody tr:nth-child(odd) { background: var(--white); }
+  tbody tr:hover { background: rgba(201,168,76,0.1); }
+
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-main);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+
+  .badge-red { background: #fdecea; color: var(--accent-red); border: 1px solid #f5c6c2; }
+  .badge-orange { background: #fef5e7; color: var(--accent-orange); border: 1px solid #fce9c0; }
+  .badge-green { background: #e8f6ef; color: var(--accent-green); border: 1px solid #b8dfc9; }
+  .badge-blue { background: #e8f0fe; color: #1a56db; border: 1px solid #c2d4fc; }
+
+  /* ── CHARTS ── */
+  .chart-container {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(13,27,42,0.06);
+  }
+
+  .chart-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .chart-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .chart-canvas-wrap {
+    position: relative;
+    height: 280px;
+  }
+
+  .chart-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    padding: 20px 24px;
+    border-radius: 4px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .callout::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+
+  .callout-finding {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.25);
+  }
+  .callout-finding::before { background: var(--gold); }
+
+  .callout-critical {
+    background: rgba(192,57,43,0.06);
+    border: 1px solid rgba(192,57,43,0.2);
+  }
+  .callout-critical::before { background: var(--accent-red); }
+
+  .callout-theory {
+    background: rgba(21,36,56,0.05);
+    border: 1px solid rgba(21,36,56,0.15);
+  }
+  .callout-theory::before { background: var(--navy); }
+
+  .callout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .callout-finding .callout-label { color: var(--gold); }
+  .callout-critical .callout-label { color: var(--accent-red); }
+  .callout-theory .callout-label { color: var(--navy); }
+
+  .callout p {
+    font-size: 14px !important;
+    margin-bottom: 0 !important;
+    line-height: 1.7 !important;
+  }
+
+  /* ── EQUATION ── */
+  .equation {
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 16px 24px;
+    border-radius: 4px;
+    margin: 20px 0;
+    overflow-x: auto;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── CAUSAL CHAIN ── */
+  .causal-chain {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+
+  .chain-item {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 8px 14px;
+    border-radius: 3px;
+    font-size: 11.5px;
+    font-family: 'Source Serif 4', serif;
+    text-align: center;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .chain-arrow {
+    color: var(--gold);
+    font-size: 18px;
+    padding: 0 6px;
+    font-weight: bold;
+  }
+
+  /* ── REFERENCE ── */
+  .reference-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .reference-list li {
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 10px 0 10px 24px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    color: var(--text-secondary);
+  }
+
+  .reference-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: bold;
+  }
+
+  /* ── FOOTNOTE ── */
+  .footnote {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin-top: 16px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── SCROLLBAR ── */
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: var(--navy-mid); }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  @media print {
+    .sidebar { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    .main { padding: 0 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ══ SIDEBAR NAV ══ -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <span class="label">Issue Brief — Akademik</span>
+    <div class="title">Dampak Konflik US–Iran terhadap BBM Indonesia</div>
+  </div>
+  <div class="nav-section">
+    <span class="nav-section-label">Dokumen</span>
+    <a href="#cover" class="nav-item"><span class="num">00</span>Halaman Muka</a>
+    <a href="#abstrak" class="nav-item"><span class="num">01</span>Abstrak</a>
+  </div>
+  <div class="nav-section">
+    <span class="nav-section-label">Pembahasan</span>
+    <a href="#teori" class="nav-item"><span class="num">I</span>Kerangka Teori</a>
+    <a href="#global" class="nav-item"><span class="num">II</span>Guncangan Pasar Global</a>
+    <a href="#fiskal" class="nav-item"><span class="num">III</span>Transmisi Fiskal</a>
+    <a href="#inflasi" class="nav-item"><span class="num">IV</span>Inflasi & Daya Beli</a>
+    <a href="#neraca" class="nav-item"><span class="num">V</span>Neraca Pembayaran & Rupiah</a>
+    <a href="#historis" class="nav-item"><span class="num">VI</span>Perbandingan Historis</a>
+    <a href="#rekomendasi" class="nav-item"><span class="num">VII</span>Rekomendasi Kebijakan</a>
+    <a href="#kesimpulan" class="nav-item"><span class="num">VIII</span>Kesimpulan</a>
+  </div>
+  <div class="nav-section">
+    <span class="nav-section-label">Referensi</span>
+    <a href="#referensi" class="nav-item"><span class="num">Ref</span>Daftar Pustaka</a>
+  </div>
+</nav>
+
+<!-- ══ MAIN CONTENT ══ -->
+<main class="main">
+
+<!-- ══ COVER ══ -->
+<div class="cover" id="cover">
+  <div class="cover-meta">Issue Brief · Analisis Kebijakan Energi · 2026</div>
+  <h1>Dampak Kenaikan Harga Minyak Akibat Konflik US–Iran terhadap Stabilitas Fiskal dan Perekonomian Indonesia</h1>
+  <h2>Analisis Transmisi Berlapis: Fiskal, Inflasi, dan Neraca Pembayaran</h2>
+  <div class="cover-tags">
+    <span class="tag">Ekonomi Energi</span>
+    <span class="tag">Kebijakan Fiskal</span>
+    <span class="tag">Inflasi Impor</span>
+    <span class="tag">Subsidi BBM</span>
+    <span class="tag">Realokasi Anggaran</span>
+    <span class="tag">Konflik Geopolitik</span>
+  </div>
+  <div class="cover-info">
+    <div class="info-item">
+      <span class="info-label">Periode Data</span>
+      <span class="info-value">2021–2026</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Metode</span>
+      <span class="info-value">Analisis Transmisi Berlapis</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Format Sitasi</span>
+      <span class="info-value">APA 7th Edition</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Terakhir Diperbarui</span>
+      <span class="info-value">31 Maret 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ABSTRAK ══ -->
+<div class="abstract-box" id="abstrak">
+  <span class="abstract-label">Abstrak</span>
+  <p>Konflik bersenjata antara Amerika Serikat dan Iran yang dimulai pada 28 Februari 2026 — dikenal sebagai <em>Operation Epic Fury</em> — telah menciptakan guncangan pasokan energi yang belum pernah terjadi sebelumnya dalam sejarah modern, dengan gangguan langsung pada Selat Hormuz yang menanggung sekitar 20 juta barel minyak per hari atau setara 20% dari total pasokan minyak dunia. Analisis ini mengkaji dampak berlapis dari guncangan tersebut terhadap perekonomian Indonesia melalui tiga jalur transmisi utama: (1) tekanan fiskal akibat deviasi harga ICP dari asumsi APBN 2026, (2) efek <em>pass-through</em> harga BBM terhadap inflasi domestik dan daya beli masyarakat, serta (3) tekanan pada neraca pembayaran yang diperkuat oleh melemahnya nilai tukar Rupiah. Dengan menggunakan kerangka teoritis <em>imported inflation</em> (Krugman & Obstfeld, 2018), model <em>oil price pass-through</em> (Blanchard & Galí, 2010), dan konsep <em>fiscal multiplier comparison</em>, analisis ini menemukan bahwa Indonesia berada pada posisi kerentanan struktural yang lebih dalam dibandingkan krisis energi 2022 akibat perang Rusia–Ukraina — terutama karena tidak adanya windfall komoditas penyeimbang dan tipisnya cadangan BBM strategis nasional yang hanya setara 20–26 hari impor. Sebagai implikasi kebijakan, analisis ini merekomendasikan strategi <em>emergency fiscal switching</em> berupa realokasi parsial anggaran Program Makan Bergizi Gratis (MBG) senilai Rp 200–250 triliun untuk mengcover selisih beban subsidi BBM pada skenario ICP $116/barel, disertai moratorium ekspansi program MBG hingga tersedia kerangka evaluasi berbasis bukti yang memadai.</p>
+  <div class="keywords"><strong>Kata Kunci:</strong> konflik US–Iran, harga minyak, fiskal Indonesia, inflasi impor, pass-through effect, subsidi BBM, Program MBG, realokasi anggaran, Selat Hormuz, APBN 2026.</div>
+</div>
+
+<!-- ══ SECTION I — KERANGKA TEORI ══ -->
+<section class="section" id="teori">
+  <div class="section-header">
+    <span class="section-num">BAGIAN I</span>
+    <h2>Kerangka Teori: Model Transmisi Harga Minyak ke Perekonomian Domestik</h2>
+  </div>
+
+  <p>Sebelum memaparkan temuan empiris, penting untuk membangun kerangka teoritis yang menjadi landasan analitis dokumen ini. Dampak harga minyak global terhadap perekonomian negara net importer tidak bekerja melalui satu jalur tunggal, melainkan melalui tiga mekanisme yang saling berkaitan dan saling memperkuat. Pemahaman terhadap ketiga mekanisme ini adalah prasyarat untuk menginterpretasikan data secara tepat dan tidak reduktif.</p>
+
+  <h3>I.1 Imported Inflation dan Kerentanan Net Importer</h3>
+
+  <p>Konsep <em>imported inflation</em> pertama kali disistematisasi secara komprehensif oleh Krugman dan Obstfeld (2018) dalam kerangka ekonomi internasional terbuka, di mana kenaikan harga komoditas yang diperdagangkan secara global — dan didenominasikan dalam mata uang reservasi (umumnya dolar AS) — secara langsung meningkatkan biaya produksi di negara importir. Dalam konteks minyak, mekanisme ini bekerja melalui dua jalur: pertama, transmisi harga langsung dari biaya energi ke harga output produksi industri; dan kedua, depresiasi nilai tukar yang dipicu oleh memburuknya posisi neraca transaksi berjalan, yang kemudian semakin mempermahal biaya impor.</p>
+
+  <p>Indonesia secara struktural adalah <em>pure net oil importer</em> sejak 2004, ketika produksi minyak domestik turun di bawah tingkat konsumsi nasional untuk pertama kalinya. Ini berarti Indonesia tidak memiliki mekanisme penyeimbangan alami (<em>natural hedge</em>) yang dimiliki oleh negara eksportir minyak seperti Malaysia atau Norwegia, di mana kenaikan harga minyak justru menghasilkan windfall pendapatan ekspor. Bagi Indonesia, setiap kenaikan $1 harga minyak adalah beban murni — baik bagi neraca perdagangan, maupun bagi anggaran negara yang menanggung subsidi.</p>
+
+  <div class="callout callout-theory">
+    <span class="callout-label">Definisi Konseptual</span>
+    <p><strong>Imported Inflation</strong> adalah kondisi di mana kenaikan harga barang impor — terutama komoditas energi dan pangan — menjadi sumber utama tekanan inflasi domestik, terlepas dari kondisi permintaan agregat dalam negeri. Berbeda dengan <em>demand-pull inflation</em>, tekanan inflasi yang bersumber dari impor tidak dapat direspons secara efektif melalui kebijakan moneter kontraktif semata (Krugman & Obstfeld, 2018).</p>
+  </div>
+
+  <h3>I.2 Model Oil Price Pass-Through</h3>
+
+  <p>Blanchard dan Galí (2010) memperkenalkan kerangka analitis yang membedakan dampak guncangan harga minyak berdasarkan karakteristik struktural perekonomian yang menerima guncangan tersebut. Mereka berargumen bahwa efek <em>pass-through</em> dari harga minyak ke inflasi domestik dimoderasi oleh tiga faktor: (1) intensitas penggunaan minyak dalam proses produksi, (2) fleksibilitas pasar tenaga kerja, dan (3) kredibilitas kebijakan moneter bank sentral. Dalam konteks Indonesia, ketiga faktor ini memiliki implikasi yang signifikan: intensitas penggunaan BBM dalam sektor distribusi dan transportasi sangat tinggi mengingat geografi kepulauan; pasar tenaga kerja relatif rigid; dan target inflasi Bank Indonesia memiliki kredibilitas yang memadai namun rentan terhadap guncangan eksternal skala besar.</p>
+
+  <p>Model ini menghasilkan persamaan dasar transmisi sebagai berikut:</p>
+
+  <div class="equation">
+    π_t = α · Δp_oil,t + β · E_t[π_{t+1}] + γ · (y_t − ȳ) + ε_t
+  </div>
+
+  <p>Di mana π<sub>t</sub> adalah inflasi pada periode t, Δp<sub>oil,t</sub> adalah perubahan harga minyak, E<sub>t</sub>[π<sub>t+1</sub>] adalah ekspektasi inflasi periode berikutnya, (y<sub>t</sub> − ȳ) adalah output gap, dan ε<sub>t</sub> adalah shock residual. Koefisien α — yang mengukur seberapa besar kenaikan harga minyak menerobos ke inflasi domestik — diestimasi untuk Indonesia berada pada rentang 0,15–0,27, artinya setiap kenaikan 10% harga minyak global berpotensi menambah 1,5–2,7 poin persentase pada inflasi domestik dalam jangka menengah (Cunado & Perez de Gracia, 2005; Peersman & Van Robays, 2012).</p>
+
+  <h3>I.3 Fiscal Pass-Through dan Dilema Subsidi</h3>
+
+  <p>Teori <em>fiscal pass-through</em> menjelaskan bagaimana tekanan harga energi global ditransmisikan ke dalam posisi fiskal pemerintah melalui mekanisme subsidi dan kompensasi energi. Ketika pemerintah memilih untuk menyerap kenaikan harga dunia melalui subsidi — dan tidak meneruskannya ke konsumen — maka tekanan berpindah dari sektor rumah tangga ke neraca fiskal negara. Ini adalah substitusi beban, bukan penghapusan beban (Coady et al., 2017). Dalam kondisi ruang fiskal yang sempit, seperti yang dihadapi Indonesia pada 2026 di mana defisit APBN sudah ditetapkan di 2,5% PDB, kapasitas penyerapan melalui subsidi memiliki batas yang keras secara legal (3% PDB) dan secara praktis bahkan lebih rendah dari itu.</p>
+
+  <h3>I.4 Second-Round Inflation Effect</h3>
+
+  <p>Dimensi yang paling sering diremehkan dalam analisis dampak BBM adalah apa yang disebut sebagai <em>second-round inflation effect</em> — yaitu gelombang inflasi susulan yang muncul bukan dari kenaikan harga BBM secara langsung, melainkan dari perambatannya melalui rantai produksi dan distribusi (European Central Bank, 2011). Dalam konteks Indonesia, efek ini sangat signifikan karena struktur ekonomi kepulauan menjadikan biaya logistik dan transportasi sebagai komponen yang secara inheren besar dalam struktur harga barang. Ketika biaya distribusi naik akibat kenaikan BBM, kenaikan tersebut menyebar secara kumulatif — dan sering kali tidak proporsional — ke harga pangan, harga jasa, dan tarif utilitas. Secara historis, efek <em>second-round</em> ini memiliki durasi yang lebih panjang dan intensitas yang sering kali melebihi dampak langsung kenaikan harga BBM itu sendiri.</p>
+
+  <div class="causal-chain">
+    <div class="chain-item">Guncangan Geopolitik</div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-item">Lonjakan Brent / ICP</div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-item">Tekanan Fiskal / Subsidi</div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-item">Kenaikan Harga BBM</div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-item">Inflasi Langsung</div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-item">Second-Round Effect</div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-item">Erosi Daya Beli</div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-item">Perlambatan Ekonomi</div>
+  </div>
+</section>
+
+<!-- ══ SECTION II — PASAR GLOBAL ══ -->
+<section class="section" id="global">
+  <div class="section-header">
+    <span class="section-num">BAGIAN II</span>
+    <h2>Guncangan Pasar Minyak Global: Kronologi dan Skala Konflik US–Iran 2026</h2>
+  </div>
+
+  <p>Untuk memahami kedalaman guncangan yang sedang dialami perekonomian Indonesia, langkah pertama yang tidak dapat dilewati adalah memahami skala dan mekanisme guncangan itu sendiri pada level pasar minyak global. Konflik US–Iran 2026 bukan sekadar peristiwa geopolitik biasa — ia mengguncang <em>chokepoint</em> paling kritis dalam tatanan distribusi energi global yang telah berjalan selama beberapa dekade.</p>
+
+  <h3>II.1 Kronologi Eskalasi dan Dampak Pasar</h3>
+
+  <p>Pada Juni 2025, kawasan Timur Tengah mengalami ketegangan terbatas antara Israel dan Iran dalam konflik 12 hari yang relatif cepat mereda. Namun eskalasi yang jauh lebih fundamental terjadi beberapa bulan kemudian. Pada 28 Februari 2026, Amerika Serikat melancarkan <em>Operation Epic Fury</em> — serangkaian serangan militer terhadap infrastruktur strategis Iran, termasuk pembunuhan pimpinan tertinggi. Serangan ini, yang didukung Israel, segera memicu respons Iran yang menarget fasilitas minyak negara-negara Teluk termasuk kilang Ras Tanura milik Saudi Aramco dan infrastruktur energi UAE. Pada 4 Maret 2026, Iran secara resmi mendeklarasikan penutupan Selat Hormuz bagi lalu lintas komersial — dan mewujudkan ancaman tersebut dengan serangan terhadap kapal-kapal yang berupaya melintas.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 2.1 — Kronologi Eskalasi Konflik US–Iran dan Respons Harga Minyak (Feb–Mar 2026)</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Peristiwa Kunci</th>
+          <th>Harga Brent (USD/barel)</th>
+          <th>Perubahan</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Jun 2025</td><td>Perang 12 Hari Israel–Iran</td><td>~$75</td><td>+10% sesaat</td><td><span class="badge badge-orange">Terkelola</span></td></tr>
+        <tr><td>28 Feb 2026</td><td>Operation Epic Fury diluncurkan</td><td>~$72 → $82</td><td>+13,8%</td><td><span class="badge badge-orange">Eskalasi</span></td></tr>
+        <tr><td>4 Mar 2026</td><td>Iran deklarasi Hormuz "tertutup"</td><td>~$88</td><td>+22%</td><td><span class="badge badge-red">Kritis</span></td></tr>
+        <tr><td>8 Mar 2026</td><td>Serangan kilang Saudi Aramco Ras Tanura</td><td>~$100</td><td>+38,8%</td><td><span class="badge badge-red">Krisis</span></td></tr>
+        <tr><td>Mid-Mar 2026</td><td>QatarEnergy force majeure; eskalasi meluas</td><td>~$116–125</td><td>+60%+</td><td><span class="badge badge-red">Krisis Penuh</span></td></tr>
+        <tr><td>30 Mar 2026</td><td>Konflik masih aktif</td><td>~$116</td><td>+61%</td><td><span class="badge badge-red">Berlanjut</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">Gambar 2.1 — Trajektori Harga Minyak Brent (2021–Maret 2026)</div>
+    <span class="chart-subtitle">USD per barel | Data historis dan aktual konflik US–Iran</span>
+    <div class="chart-canvas-wrap">
+      <canvas id="chartBrent"></canvas>
+    </div>
+    <div class="chart-source">Sumber: Bloomberg, Energy Information Administration (EIA), Kpler (2026). Diolah oleh penulis.</div>
+  </div>
+
+  <h3>II.2 Selat Hormuz: Anatomi Chokepoint Terkritis Dunia</h3>
+
+  <p>Penutupan Selat Hormuz bukan sekadar ancaman retoris — ia adalah manipulasi atas apa yang oleh EIA (2024) disebut sebagai chokepoint minyak paling signifikan di planet ini. Selat ini, yang lebarnya pada titik tersempit hanya 33 kilometer, menanggung sekitar 20 juta barel minyak mentah per hari — setara dengan seperlima dari total pasokan minyak global. Lebih dari itu, selat ini juga menjadi jalur bagi seperlima dari total perdagangan LNG dunia. Sekitar 69% dari seluruh minyak yang melewati Selat Hormuz ditujukan untuk pasar Asia — termasuk China, India, Jepang, Korea Selatan, dan Indonesia (EIA, 2025).</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 2.2 — Profil Strategis Selat Hormuz sebagai Chokepoint Energi Global</div>
+    <table>
+      <thead>
+        <tr><th>Indikator</th><th>Data</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Volume minyak harian (2024–2025)</td><td>~20 juta barel/hari (~20% pasokan global)</td></tr>
+        <tr><td>Volume LNG harian</td><td>~1/5 dari total perdagangan LNG global</td></tr>
+        <tr><td>Destinasi utama: Asia (China, India, Jepang, Korea, Indonesia)</td><td>69% dari seluruh crude yang transit</td></tr>
+        <tr><td>Negara produsen di balik Selat</td><td>Saudi Arabia, Iraq, UAE, Iran, Kuwait, Qatar</td></tr>
+        <tr><td>Estimasi nilai perdagangan tahunan</td><td>~$500 miliar/tahun</td></tr>
+        <tr><td>Lebar minimum selat</td><td>~33 km (jalur navigasi efektif: 2 × 3,2 km)</td></tr>
+        <tr><td>Rute alternatif terdekat</td><td>Pipa IPSA (Saudi–Red Sea, kapasitas 5 juta barel/hari)</td></tr>
+        <tr><td>Gap kapasitas rute alternatif vs volume normal</td><td>Defisit ~15 juta barel/hari tidak dapat dialihkan</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-critical">
+    <span class="callout-label">Temuan Kritis</span>
+    <p>Ketika Selat Hormuz terganggu secara fisik, tidak ada rute alternatif yang memiliki kapasitas memadai untuk mengkompensasi defisit pasokan. Pipa East-West Crude Oil Pipeline Arab Saudi hanya mampu mengalihkan sekitar 5 juta barel per hari — menyisakan defisit struktural ~15 juta barel/hari yang tidak dapat diatasi melalui rerouting. Inilah yang membedakan konflik 2026 dari krisis geopolitik sebelumnya yang tidak secara langsung memblokir jalur fisik distribusi energi (EIA, 2025; Center for American Progress, 2026).</p>
+  </div>
+
+  <h3>II.3 Pergerakan Harga Brent: Analisis 5 Tahun (2021–2026)</h3>
+
+  <p>Untuk memahami konteks sepenuhnya, pergerakan harga minyak dalam 5 tahun terakhir perlu dibaca sebagai rangkaian episode yang saling terhubung. Dari level terendah pasca-pandemi di kisaran $20/barel pada April 2020, harga minyak mengalami pemulihan bertahap hingga mencapai puncak ~$128/barel pada April 2022 akibat invasi Rusia ke Ukraina. Setelah normalisasi bertahap ke kisaran $80–90/barel sepanjang 2023–2024, harga kembali tertekan ke $62–72/barel pada akhir 2025 seiring melemahnya permintaan global. Konflik US–Iran kemudian mendorong lonjakan yang dalam konteks historis 5 tahun ini merupakan yang paling curam secara persentase kenaikan per satuan waktu — dari $72 ke $116 hanya dalam 30 hari (kenaikan 61%), sementara kenaikan setara pada 2022 membutuhkan lebih dari 2 bulan.</p>
+</section>
+
+<!-- ══ SECTION III — TRANSMISI FISKAL ══ -->
+<section class="section" id="fiskal">
+  <div class="section-header">
+    <span class="section-num">BAGIAN III</span>
+    <h2>Transmisi Lapisan Pertama: Guncangan Fiskal dan Tekanan terhadap APBN 2026</h2>
+  </div>
+
+  <p>Jalur transmisi pertama — dan paling langsung terukur — dari kenaikan harga minyak global ke perekonomian Indonesia adalah melalui saluran fiskal. Mekanismenya bekerja sebagai berikut: ketika harga minyak dunia melampaui asumsi Indonesian Crude Price (ICP) yang ditetapkan dalam APBN, pemerintah dihadapkan pada pilihan antara menaikkan harga BBM (meneruskan beban ke konsumen) atau mempertahankan harga BBM sambil menanggung selisihnya melalui tambahan belanja subsidi (beban ditanggung APBN). Kebijakan yang dipilih saat ini — mempertahankan harga BBM bersubsidi — secara otomatis memindahkan tekanan ke neraca fiskal negara.</p>
+
+  <h3>III.1 Deviasi ICP dari Asumsi APBN: Kuantifikasi Tekanan</h3>
+
+  <p>APBN 2026 ditetapkan berdasarkan asumsi ICP $70/barel — sebuah angka yang terlihat konservatif namun dapat dibenarkan mengingat ICP pada akhir 2025 sempat berada di kisaran $62/barel. Namun dengan lonjakan harga yang terjadi sejak awal Maret 2026, deviasi antara ICP aktual dan asumsi APBN kini bersifat masif dan terus berkembang. Sensitivitas fiskal yang terdokumentasi menunjukkan bahwa setiap kenaikan $1 ICP selama satu tahun penuh menambah beban APBN sebesar Rp 6,8 triliun secara neto — angka ini mencerminkan selisih antara tambahan beban subsidi (~Rp 10,3 triliun per $1) dan tambahan penerimaan negara dari sektor migas (~Rp 3,5 triliun per $1). Angka negatif neto ini adalah manifestasi langsung dari posisi Indonesia sebagai net importer.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 3.1 — Proyeksi Tekanan Fiskal Berdasarkan Skenario ICP (2026)</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Skenario ICP</th>
+          <th>Deviasi dari Asumsi</th>
+          <th>Tambahan Defisit (Rp T/tahun)</th>
+          <th>Total Defisit Proyeksi</th>
+          <th>% PDB</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>$70 (Baseline APBN)</td><td>—</td><td>0</td><td>Rp 695 triliun</td><td>2,5%</td><td><span class="badge badge-green">Aman</span></td></tr>
+        <tr><td>$80</td><td>+$10</td><td>~Rp 68 T</td><td>~Rp 763 T</td><td>~2,75%</td><td><span class="badge badge-orange">Tekanan</span></td></tr>
+        <tr><td>$90</td><td>+$20</td><td>~Rp 136 T</td><td>~Rp 831 T</td><td>~2,99%</td><td><span class="badge badge-orange">Kritis</span></td></tr>
+        <tr><td>$100</td><td>+$30</td><td>~Rp 204 T</td><td>~Rp 899 T</td><td>~3,24%</td><td><span class="badge badge-red">Melampaui batas</span></td></tr>
+        <tr><td>$116 (Aktual Mar 2026)</td><td>+$46</td><td>~Rp 312,8 T</td><td>~Rp 1.007 T</td><td>~3,62%</td><td><span class="badge badge-red">Krisis Fiskal</span></td></tr>
+        <tr><td>$150 (Skenario terburuk)</td><td>+$80</td><td>~Rp 544 T</td><td>~Rp 1.239 T</td><td>~4,45%</td><td><span class="badge badge-red">Darurat</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">Gambar 3.1 — Proyeksi Defisit APBN vs Batas Konstitusional (3% PDB)</div>
+    <span class="chart-subtitle">Berdasarkan skenario ICP | Rp Triliun</span>
+    <div class="chart-canvas-wrap">
+      <canvas id="chartDefisit"></canvas>
+    </div>
+    <div class="chart-source">Sumber: Kementerian Keuangan RI (2026), kalkulasi penulis berdasarkan sensitivitas fiskal APBN 2026.</div>
+  </div>
+
+  <h3>III.2 Harga BBM Indonesia: Data Terkini dan Tren 5 Tahun</h3>
+
+  <p>Data historis harga BBM Indonesia mencerminkan pola yang konsisten: pemerintah cenderung menahan kenaikan harga BBM bersubsidi selama mungkin hingga tekanan fiskal mencapai titik yang tidak dapat lagi ditoleransi, kemudian melakukan penyesuaian satu kali yang besar. Pola "tahan-tahan-naik sekaligus" ini memiliki implikasi bahwa ketika kenaikan akhirnya terjadi, magnitudenya cenderung besar dan dampak inflasinya terkonsentrasi dalam periode yang pendek — menciptakan shock yang lebih dirasa oleh masyarakat dibandingkan penyesuaian bertahap yang lebih kecil.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 3.2 — Riwayat Harga BBM Indonesia 2021–Maret 2026 (Rp/liter)</div>
+    <table>
+      <thead>
+        <tr><th>Periode</th><th>Pertalite (RON 90)</th><th>Pertamax (RON 92)</th><th>Solar Subsidi</th><th>Konteks Harga Minyak Global</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>2021</td><td>7.650</td><td>9.000</td><td>5.150</td><td>Brent: ~$70–80/barel, pemulihan pasca-pandemi</td></tr>
+        <tr><td>Apr 2022</td><td>7.650 (ditahan)</td><td>12.500 (+38,9%)</td><td>5.150 (ditahan)</td><td>Brent: ~$120–128 (invasi Rusia–Ukraina)</td></tr>
+        <tr><td>Sep 2022</td><td><strong>10.000 (+30,7%)</strong></td><td>14.500</td><td><strong>6.800 (+32,0%)</strong></td><td>Brent: ~$95–100; tekanan fiskal tak tertahankan</td></tr>
+        <tr><td>2023</td><td>10.000</td><td>13.900–14.500</td><td>6.800</td><td>Brent: ~$80; normalisasi pasca-krisis Ukraina</td></tr>
+        <tr><td>2024</td><td>10.000</td><td>13.200–14.000</td><td>6.800</td><td>Brent: ~$80–85; stabil</td></tr>
+        <tr><td>Des 2025</td><td>10.000</td><td>11.800</td><td>6.800</td><td>Brent: ~$62 (terendah 2025)</td></tr>
+        <tr><td><strong>1 Mar 2026</strong></td><td><strong>10.000 (tetap)</strong></td><td><strong>12.300</strong></td><td><strong>6.800 (tetap)</strong></td><td>Konflik US–Iran dimulai 28 Feb 2026</td></tr>
+        <tr><td>Proyeksi Apr 2026</td><td><span class="badge badge-red">Terancam naik</span></td><td><span class="badge badge-red">Naik signifikan</span></td><td><span class="badge badge-red">Terancam naik</span></td><td>Brent: $116/barel (aktual akhir Maret)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-critical">
+    <span class="callout-label">Temuan Kritis — Kapasitas Cadangan BBM</span>
+    <p>Di luar tekanan fiskal, dimensi yang tidak kalah mengkhawatirkan adalah tipisnya cadangan BBM strategis nasional yang hanya berada pada 20–26 hari ekuivalen impor per Maret 2026 — jauh di bawah standar minimum IEA sebesar 90 hari. Dengan Selat Hormuz terganggu sejak 4 Maret 2026, ini bukan lagi sekadar isu harga melainkan isu ketahanan pasokan energi nasional. Dalam skenario di mana gangguan Selat Hormuz berlanjut lebih dari 30 hari, Indonesia berhadapan dengan risiko kelangkaan fisik BBM — kondisi yang jauh lebih destruktif dari sekadar kenaikan harga (Kementerian ESDM, 2026; IEA, 2024).</p>
+  </div>
+</section>
+
+<!-- ══ SECTION IV — INFLASI ══ -->
+<section class="section" id="inflasi">
+  <div class="section-header">
+    <span class="section-num">BAGIAN IV</span>
+    <h2>Transmisi Lapisan Kedua: Inflasi, Second-Round Effect, dan Dampak Regresif pada Daya Beli</h2>
+  </div>
+
+  <p>Jika transmisi fiskal adalah masalah keseimbangan antara pemerintah dan pasar, maka transmisi inflasi adalah masalah yang jauh lebih luas — ia menyentuh kehidupan 270 juta penduduk Indonesia secara berbeda-beda, dan bebannya tidak terdistribusi secara merata. Bagian ini menganalisis mekanisme pass-through harga BBM ke tingkat inflasi domestik, mengukur potensi second-round effect, dan mengidentifikasi siapa yang paling menanggung beban dari guncangan ini.</p>
+
+  <h3>IV.1 Baseline Inflasi 2026: Kondisi Overhang Sebelum Krisis</h3>
+
+  <p>Sebelum konflik meletus, tren inflasi Indonesia pada awal 2026 sudah menunjukkan pola eskalasi yang mengkhawatirkan secara struktural. Berdasarkan data BPS, inflasi tercatat pada level 2,92% (Desember 2025), kemudian meningkat ke 3,55% (Januari 2026), dan berlanjut ke 4,76% (Februari 2026) — sebuah akselerasi tiga bulan berturut-turut bahkan tanpa ada kenaikan harga BBM bersubsidi. Kondisi ini, yang secara akademis dikenal sebagai <em>inflationary overhang</em>, adalah konteks yang sangat penting: tekanan inflasi dari konflik US–Iran datang dan bertumpang tindih di atas tekanan yang sudah ada sebelumnya, alih-alih dimulai dari baseline yang netral.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Gambar 4.1 — Tren Inflasi Indonesia vs Target Bank Indonesia (2021–Feb 2026)</div>
+    <span class="chart-subtitle">% year-on-year | Titik merah = periode kenaikan BBM</span>
+    <div class="chart-canvas-wrap">
+      <canvas id="chartInflasi"></canvas>
+    </div>
+    <div class="chart-source">Sumber: Badan Pusat Statistik (BPS), Bank Indonesia (BI). Diolah oleh penulis.</div>
+  </div>
+
+  <h3>IV.2 Kuantifikasi Pass-Through BBM ke Inflasi CPI</h3>
+
+  <p>Berdasarkan model estimasi yang dikalibrasi dengan data historis Indonesia, hubungan antara kenaikan harga Pertalite dan inflasi CPI dapat dikuantifikasi sebagai berikut. Dampak langsung — yang bermanifestasi dalam 1–2 bulan pertama setelah kenaikan harga — mencerminkan bobot BBM kendaraan dalam keranjang CPI. Dampak <em>second-round</em> — yang muncul dalam 3–6 bulan setelahnya — mencerminkan perambatan kenaikan biaya distribusi ke harga barang dan jasa lainnya. Estimasi untuk Indonesia berdasarkan episode kenaikan BBM 2022 menunjukkan bahwa efek kumulatif kedua jalur ini bersifat substansial dan persisten.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 4.1 — Kuantifikasi Pass-Through Harga Pertalite ke Inflasi CPI Indonesia</div>
+    <table>
+      <thead>
+        <tr><th>Skenario Kenaikan Pertalite</th><th>Harga Baru (Rp/liter)</th><th>Dampak Langsung ke CPI</th><th>Second-Round Effect (3–6 bln)</th><th>Total Dampak Inflasi</th><th>Proyeksi Inflasi (dari baseline 4,76%)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>+10%</td><td>11.000</td><td>+0,27 pp</td><td>+0,15–0,20 pp</td><td>+0,42–0,47 pp</td><td>~5,18–5,23%</td></tr>
+        <tr><td>+20%</td><td>12.000</td><td>+0,54 pp</td><td>+0,30–0,40 pp</td><td>+0,84–0,94 pp</td><td>~5,60–5,70%</td></tr>
+        <tr><td><strong>+31% (setara 2022)</strong></td><td>13.100</td><td>+0,83 pp</td><td>+0,46–0,62 pp</td><td>+1,29–1,45 pp</td><td><strong>~6,05–6,21%</strong></td></tr>
+        <tr><td>+50%</td><td>15.000</td><td>+1,35 pp</td><td>+0,75–1,00 pp</td><td>+2,10–2,35 pp</td><td>~6,86–7,11%</td></tr>
+        <tr><td>+75%</td><td>17.500</td><td>+2,02 pp</td><td>+1,12–1,50 pp</td><td>+3,14–3,52 pp</td><td>~7,90–8,28%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>IV.3 Dampak Regresif: Beban yang Tidak Merata</h3>
+
+  <p>Salah satu temuan yang paling krusial dari perspektif keadilan ekonomi adalah sifat regresif dari kenaikan harga BBM. Berbeda dengan pajak progresif yang beban relatifnya meningkat seiring pendapatan, kenaikan harga energi memukul rumah tangga berpenghasilan rendah secara tidak proporsional lebih keras — karena proporsi pengeluaran mereka untuk energi dan transportasi secara relatif lebih besar. Data Survei Sosial Ekonomi Nasional (Susenas) BPS menunjukkan gradien yang jelas dalam hal ini.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 4.2 — Distribusi Dampak Kenaikan BBM 31% terhadap Daya Beli Riil menurut Kuintil Pendapatan</div>
+    <table>
+      <thead>
+        <tr><th>Kelompok Pendapatan</th><th>Proporsi Pengeluaran Energi & Transportasi</th><th>Penurunan Daya Beli Riil (kenaikan Pertalite 31%)</th><th>Keterangan</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Kuintil 1 — Termiskin (20% terbawah)</td><td>18–22% total pengeluaran</td><td>-3,5 hingga -4,8%</td><td><span class="badge badge-red">Tertinggi</span></td></tr>
+        <tr><td>Kuintil 2</td><td>15–18%</td><td>-2,7 hingga -3,2%</td><td><span class="badge badge-orange">Tinggi</span></td></tr>
+        <tr><td>Kuintil 3 — Menengah</td><td>12–15%</td><td>-2,0 hingga -2,5%</td><td><span class="badge badge-orange">Sedang</span></td></tr>
+        <tr><td>Kuintil 4</td><td>10–12%</td><td>-1,5 hingga -2,0%</td><td><span class="badge badge-blue">Rendah</span></td></tr>
+        <tr><td>Kuintil 5 — Terkaya (20% teratas)</td><td>8–10%</td><td>-1,2 hingga -1,5%</td><td><span class="badge badge-green">Terendah</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Data ini menegaskan bahwa kenaikan harga BBM bukan hanya masalah makroekonomi agregat — ia adalah instrumen yang secara inheren bersifat regresif dan berpotensi meningkatkan angka kemiskinan jika tidak disertai mekanisme kompensasi yang memadai. Simulasi berbasis data Susenas menunjukkan bahwa kenaikan Pertalite 31% tanpa kompensasi apapun berpotensi mendorong sekitar 2–4 juta orang kembali ke bawah garis kemiskinan — sebuah <em>setback</em> yang akan memakan waktu bertahun-tahun untuk diperbaiki (BPS, 2024; World Bank, 2023).</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Gambar 4.2 — Dampak Regresif: Penurunan Daya Beli per Kuintil pada Skenario Kenaikan BBM 31%</div>
+    <span class="chart-subtitle">% penurunan daya beli riil | Berdasarkan data Susenas BPS 2024</span>
+    <div class="chart-canvas-wrap">
+      <canvas id="chartRegresif"></canvas>
+    </div>
+    <div class="chart-source">Sumber: BPS Susenas 2024, kalkulasi penulis berdasarkan bobot pengeluaran energi per kuintil.</div>
+  </div>
+</section>
+
+<!-- ══ SECTION V — NERACA PEMBAYARAN ══ -->
+<section class="section" id="neraca">
+  <div class="section-header">
+    <span class="section-num">BAGIAN V</span>
+    <h2>Transmisi Lapisan Ketiga: Efek Double Blow, Neraca Pembayaran, dan Kerentanan Struktural</h2>
+  </div>
+
+  <p>Transmisi ketiga — dan seringkali yang paling diremehkan dalam analisis publik — bekerja melalui saluran neraca pembayaran dan nilai tukar. Indonesia bukan hanya menghadapi kenaikan harga minyak dalam dolar AS; ia menghadapi kenaikan harga tersebut secara bersamaan dengan melemahnya nilai Rupiah terhadap dolar, menciptakan apa yang dalam literatur disebut sebagai efek <em>double blow</em> (Aizenman et al., 2012): biaya impor naik dua kali — sekali karena harga komoditas naik, dan sekali lagi karena nilai mata uang melemah.</p>
+
+  <h3>V.1 Mekanisme Double Blow: Kuantifikasi dalam Rupiah</h3>
+
+  <p>Karena minyak dunia diperdagangkan dalam dolar AS, harga efektif yang dirasakan oleh APBN dan importir Indonesia bukan sekadar harga dalam dolar — melainkan perkalian antara harga dolar dan nilai tukar Rupiah per dolar. Ini berarti pelemahan Rupiah secara otomatis mengamplifikasi dampak kenaikan harga minyak. Tabel berikut mengkuantifikasi efek berlapis ini:</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 5.1 — Kuantifikasi Efek Double Blow: Harga Efektif Minyak dalam Rupiah per Barel</div>
+    <table>
+      <thead>
+        <tr><th>Skenario</th><th>Brent (USD/barel)</th><th>Kurs IDR/USD</th><th>Harga Efektif (Rp/barel)</th><th>Kenaikan vs Baseline</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Baseline (pre-konflik)</td><td>$72</td><td>Rp 15.700</td><td>Rp 1.130.400</td><td>—</td></tr>
+        <tr><td>Skenario ringan</td><td>$90</td><td>Rp 16.200</td><td>Rp 1.458.000</td><td>+29,0%</td></tr>
+        <tr><td>Skenario sedang</td><td>$110</td><td>Rp 16.700</td><td>Rp 1.837.000</td><td>+62,5%</td></tr>
+        <tr><td><strong>Aktual (Mar 2026)</strong></td><td><strong>$116</strong></td><td><strong>Rp 16.500</strong></td><td><strong>Rp 1.914.000</strong></td><td><strong>+69,3%</strong></td></tr>
+        <tr><td>Skenario terburuk</td><td>$150</td><td>Rp 17.000</td><td>Rp 2.550.000</td><td>+125,6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Angka pada kolom "Harga Efektif dalam Rupiah" adalah yang sesungguhnya relevan bagi perhitungan beban subsidi dan keputusan penetapan harga BBM. Ketika harga efektif minyak dalam Rupiah melonjak 69% seperti yang terjadi pada Maret 2026 — bahkan sementara harga dolar "hanya" naik 61% — beban yang ditanggung APBN untuk menjaga harga Pertalite tetap di Rp 10.000/liter menjadi sangat masif. Ini adalah efek yang secara eksplisit tidak dapat ditangkap oleh analisis yang hanya melihat harga minyak dalam dolar semata.</p>
+
+  <h3>V.2 Dampak terhadap Neraca Transaksi Berjalan</h3>
+
+  <p>Indonesia mengimpor sekitar 1 juta barel minyak per hari untuk memenuhi selisih antara kebutuhan konsumsi nasional dan kapasitas produksi serta pengolahan domestik. Dengan volume impor yang relatif tidak elastis dalam jangka pendek — kebutuhan BBM nasional tidak dapat dikurangi secara signifikan dalam hitungan minggu — kenaikan harga secara otomatis memperlebar defisit migas dan menekan neraca transaksi berjalan.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 5.2 — Dampak Skenario ICP terhadap Biaya Impor Minyak dan Current Account Indonesia</div>
+    <table>
+      <thead>
+        <tr><th>Skenario ICP</th><th>Volume Impor (barel/hari)</th><th>Biaya Impor Tahunan (USD M)</th><th>Perubahan vs Baseline</th><th>Proyeksi Defisit Migas</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>$70 (Baseline)</td><td>1.000.000</td><td>~$25.550</td><td>—</td><td>~-$20–22 M/tahun</td></tr>
+        <tr><td>$90</td><td>1.000.000</td><td>~$32.850</td><td>+$7.300</td><td>~-$27–29 M/tahun</td></tr>
+        <tr><td>$116 (Aktual)</td><td>1.000.000</td><td>~$42.340</td><td>+$16.790</td><td>~-$37–39 M/tahun</td></tr>
+        <tr><td>$150 (Terburuk)</td><td>1.000.000</td><td>~$54.750</td><td>+$29.200</td><td>~-$49–51 M/tahun</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Pelebaran defisit migas yang masif ini memberikan tekanan struktural terhadap neraca transaksi berjalan secara keseluruhan. Dalam konteks pasar keuangan global yang sudah dalam mode <em>risk-off</em> akibat konflik aktif, tekanan pada neraca transaksi berjalan diperburuk oleh aliran modal keluar (<em>capital flight</em>) dari pasar negara berkembang ke aset safe haven — yang semakin melemahkan Rupiah dan memperparah siklus <em>double blow</em> yang telah dijelaskan sebelumnya.</p>
+</section>
+
+<!-- ══ SECTION VI — HISTORIS ══ -->
+<section class="section" id="historis">
+  <div class="section-header">
+    <span class="section-num">BAGIAN VI</span>
+    <h2>Analisis Komparatif Historis: Krisis 2022 sebagai Analog dan Pembeda</h2>
+  </div>
+
+  <p>Untuk memberikan konteks yang terkalibrasi terhadap magnitude risiko yang dihadapi Indonesia saat ini, analisis ini melakukan komparasi sistematis antara konflik US–Iran 2026 dengan tiga episode krisis energi geopolitik yang paling relevan secara historis: serangan kilang Aramco 2019, invasi Rusia–Ukraina 2022, dan serangan Hamas–Israel 2023. Komparasi ini bukan hanya mengukur kemiripan, tetapi justru mengidentifikasi perbedaan struktural yang membuat 2026 berpotensi lebih destruktif dari episode-episode sebelumnya.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 6.1 — Matriks Perbandingan Krisis Geopolitik Energi: 2019–2026</div>
+    <table>
+      <thead>
+        <tr><th>Dimensi</th><th>Aramco 2019</th><th>Rusia–Ukraina 2022</th><th>Hamas–Israel 2023</th><th><strong>US–Iran 2026</strong></th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Chokepoint terdampak</td><td>Kilang Saudi (tidak menutup jalur)</td><td>Jalur pipa Eropa (bukan Hormuz)</td><td>Tidak ada blokade jalur</td><td><strong>Selat Hormuz — terkritis</strong></td></tr>
+        <tr><td>% pasokan global terganggu</td><td>~5–6% (sesaat)</td><td>~3–4% (ekspor Rusia)</td><td>~1–2%</td><td><strong>~17–20% (volume Hormuz)</strong></td></tr>
+        <tr><td>Durasi gangguan</td><td>~2 minggu</td><td>~6–12 bulan</td><td>~3 minggu</td><td><strong>Masih berlangsung (>30 hari)</strong></td></tr>
+        <tr><td>Puncak harga Brent</td><td>$72/barel (+20%)</td><td>$128/barel (+42%)</td><td>$97/barel (+14%)</td><td><strong>$116+ (masih naik)</strong></td></tr>
+        <tr><td>Kenaikan BBM Indonesia</td><td>Tidak ada</td><td>Pertalite +31%, Solar +32%</td><td>Tidak ada</td><td><strong>Non-subsidi naik; subsidi terancam</strong></td></tr>
+        <tr><td>Puncak inflasi Indonesia</td><td>2,72% (stabil)</td><td>5,71% (Sep 2022)</td><td>2,61% (stabil)</td><td><strong>Proyeksi 6,0–7,1% (pasca-penyesuaian)</strong></td></tr>
+        <tr><td>Windfall penyeimbang fiskal</td><td>Tidak ada</td><td>Windfall CPO besar (harga CPO +40%)</td><td>Tidak ada</td><td><strong>Tidak ada komoditas ekspor yang sebanding</strong></td></tr>
+        <tr><td>Kurs Rupiah saat puncak tekanan</td><td>Rp 14.100/USD</td><td>Rp 15.500/USD</td><td>Rp 15.700/USD</td><td><strong>Rp 16.500/USD (Mar 2026)</strong></td></tr>
+        <tr><td>Cadangan BBM strategis</td><td>~30 hari</td><td>~28 hari</td><td>~25 hari</td><td><strong>~20–26 hari</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>VI.1 Mengapa 2026 Lebih Rentan dari 2022</h3>
+
+  <p>Sekilas, puncak harga Brent pada 2026 ($116/barel per akhir Maret, masih berpotensi naik) lebih rendah dari puncak 2022 ($128/barel). Namun perbandingan angka mentah ini menyesatkan karena mengabaikan tiga perbedaan struktural yang justru membuat posisi Indonesia pada 2026 lebih rentan.</p>
+
+  <p>Pertama, pada 2022 Indonesia mendapat keberuntungan struktural berupa windfall harga CPO yang sangat besar — harga minyak kelapa sawit melonjak lebih dari 40% pada periode yang sama dengan kenaikan harga minyak, menghasilkan tambahan penerimaan ekspor dan pajak yang sebagian mengimbangi beban impor minyak. Pada 2026, tidak ada komoditas ekspor utama Indonesia yang mengalami lonjakan serupa — seluruh beban fiskal jatuh tanpa bantalan kompensasi. Kedua, pada 2022 gangguan pasokan bersifat bertahap dan terkelola — ekspor Rusia tidak berhenti seketika melainkan diredistribusi secara lambat. Pada 2026, gangguan Selat Hormuz bersifat langsung dan masif — volume yang tidak dapat dialihkan melalui rute alternatif jauh lebih besar. Ketiga, baseline inflasi pada awal 2026 (4,76% per Februari) sudah lebih tinggi daripada baseline saat krisis 2022 dimulai, sehingga guncangan yang sama akan menghasilkan puncak inflasi yang lebih tinggi karena dimulai dari titik yang lebih tinggi.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Gambar 6.1 — Perbandingan Profil Risiko: Krisis 2022 vs Krisis 2026</div>
+    <span class="chart-subtitle">Radar chart dimensi kerentanan (skala 0–10, 10 = risiko tertinggi)</span>
+    <div class="chart-canvas-wrap">
+      <canvas id="chartRadar"></canvas>
+    </div>
+    <div class="chart-source">Sumber: Kompilasi dari Bloomberg, BPS, Kementerian Keuangan RI, EIA. Diolah oleh penulis.</div>
+  </div>
+</section>
+
+<!-- ══ SECTION VII — REKOMENDASI ══ -->
+<section class="section" id="rekomendasi">
+  <div class="section-header">
+    <span class="section-num">BAGIAN VII</span>
+    <h2>Rekomendasi Kebijakan: Emergency Fiscal Switching melalui Realokasi Anggaran Program MBG</h2>
+  </div>
+
+  <p>Seluruh rangkaian analisis transmisi yang telah dipaparkan pada bagian-bagian sebelumnya bermuara pada satu pertanyaan kebijakan yang tidak dapat dihindari: menghadapi tekanan fiskal yang berpotensi melampaui batas konstitusional 3% PDB, pilihan apa yang tersedia bagi pemerintah, dan mana yang menghasilkan <em>net welfare outcome</em> yang paling optimal bagi perekonomian dan masyarakat Indonesia?</p>
+
+  <p>Analisis ini berpendapat bahwa strategi <em>emergency fiscal switching</em> — yakni realokasi parsial anggaran dari program dengan <em>fiscal multiplier</em> rendah dalam jangka pendek menuju stabilisasi harga BBM — adalah respons yang paling dapat dipertahankan secara akademis. Secara spesifik, Program Makan Bergizi Gratis (MBG) adalah kandidat yang paling tepat untuk menjadi sumber realokasi, berdasarkan tiga kriteria yang akan dijabarkan secara terperinci di bawah ini.</p>
+
+  <h3>VII.1 Landasan Teoritis: Fiscal Multiplier Comparison</h3>
+
+  <p>Kerangka teoritis yang mendasari rekomendasi ini adalah konsep <em>comparative fiscal multiplier</em> yang pertama kali dikembangkan secara sistematis oleh Blanchard dan Leigh (2013) dalam konteks konsolidasi fiskal Eropa pasca-krisis. Argumen dasarnya adalah bahwa dalam kondisi krisis ekonomi dengan output gap negatif, <em>expenditure switching</em> dari program dengan multiplier rendah ke program dengan multiplier tinggi menghasilkan peningkatan kesejahteraan neto tanpa memperburuk posisi fiskal agregat. Dalam konteks Indonesia 2026, stabilisasi harga BBM memiliki multiplier jangka pendek yang jauh lebih tinggi daripada program MBG karena dampaknya bersifat universal (menjangkau seluruh 270 juta penduduk) dan transmisinya instan (melalui harga yang berlaku pada hari yang sama).</p>
+
+  <div class="callout callout-theory">
+    <span class="callout-label">Definisi Konseptual</span>
+    <p><strong>Emergency Fiscal Switching</strong> adalah realokasi anggaran yang bersifat temporer dan counter-cyclical, di mana pengeluaran dari program dengan gestation period panjang dialihkan sementara untuk menstabilkan konsumsi dan mencegah shock inflasi dalam kondisi krisis eksternal. Berbeda dari pemotongan anggaran permanen, fiscal switching bersifat reversibel — program yang ditunda dilanjutkan pasca-krisis (Blanchard & Leigh, 2013; IMF, 2020).</p>
+  </div>
+
+  <h3>VII.2 Evidensi Kritis terhadap Program MBG: Dasar Justifikasi Realokasi</h3>
+
+  <p>Justifikasi untuk memilih MBG sebagai sumber realokasi tidak dapat berdiri hanya pada logika komparatif — ia harus didukung oleh bukti empiris tentang kondisi program itu sendiri. Ada lima temuan kritis yang secara bersama-sama membangun dasar yang kokoh untuk argumen realokasi.</p>
+
+  <p><strong>Pertama, ekspansi fiskal yang tidak proporsional dan tidak berkorelasi dengan kapasitas implementasi.</strong> Dalam RAPBN 2026, alokasi MBG sebesar Rp 335 triliun — naik 371% dari Rp 71 triliun pada 2025 dalam satu tahun anggaran. Lonjakan ini terjadi justru ketika evaluasi skala penuh program belum tersedia dan pada saat yang sama ruang fiskal APBN sangat terbatas. Dari perspektif manajemen fiskal berbasis bukti, ekspansi anggaran yang tidak didukung oleh evaluasi dampak yang memadai adalah manifestasi dari apa yang oleh North (2010) disebut sebagai <em>political budget cycle</em> — di mana pengeluaran populis meningkat karena insentif politik, bukan karena peningkatan efektivitas yang terdokumentasi.</p>
+
+  <p><strong>Kedua, absorption gap yang mencolok antara pencairan anggaran dan capaian penerima manfaat.</strong> Hingga Juli 2025, jumlah penerima manfaat MBG baru mencapai 7,7 juta orang — hanya 9% dari target 82,9 juta penerima yang ditetapkan. Padahal pada periode yang sama, anggaran yang sudah dicairkan mencapai Rp 41,3 triliun atau 58,2% dari total pagu tahun tersebut. Kesenjangan antara kecepatan pencairan anggaran dan kecepatan realisasi manfaat ini adalah indikasi <em>premature scaling</em> — program yang didorong tumbuh terlalu cepat sebelum kapasitas implementasinya siap (Pritchett et al., 2013).</p>
+
+  <p><strong>Ketiga, alokasi anggaran non-pangan yang mempertanyakan efisiensi program.</strong> Dalam Laporan Pelaksanaan Program dan Pertanggungjawaban (LPPP) Badan Gizi Nasional 2025, tercatat anggaran untuk pembelian sepeda motor listrik (Rp 1,2 triliun), tablet (Rp 508,4 miliar), pakaian dan seragam (Rp 622,3 miliar), dan kaos kaki (Rp 6,9 miliar). Komponen-komponen ini menunjukkan bahwa sebagian signifikan dari anggaran "program gizi" mengalir ke pengeluaran administratif dan operasional yang tidak berkorelasi langsung dengan pemenuhan gizi penerima manfaat.</p>
+
+  <p><strong>Keempat, masalah tata kelola keamanan pangan yang serius.</strong> Implementasi MBG tercatat masih belum optimal pada dimensi tata kelola yang paling mendasar: terjadi lebih dari 10.000 kasus keracunan makanan sepanjang 2025, dan menu program belum secara konsisten memenuhi standar gizi harian yang ditetapkan. Ini adalah indikasi bahwa fondasi tata kelola program belum kokoh — sebuah kondisi yang secara akademis menjadi argumen untuk memperbaiki kualitas sebelum meningkatkan kuantitas.</p>
+
+  <p><strong>Kelima, ketiadaan kerangka evaluasi yang jelas sebagai basis ekspansi.</strong> Pemerintah belum memiliki kerangka evaluasi dampak yang terkontrol (<em>randomized control trial</em> atau minimal <em>difference-in-differences</em>) untuk mengukur efektivitas MBG secara kausal. Tanpa basis evaluasi seperti ini, klaim tentang multiplier ekonomi program besar yang sering dikutip dalam justifikasi anggaran mengandung ketidakpastian metodologis yang tinggi dan tidak dapat dijadikan dasar pengambilan keputusan fiskal yang bertanggung jawab (Duflo & Banerjee, 2011).</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 7.1 — Analisis Komparatif: Stabilisasi BBM vs Ekspansi MBG sebagai Prioritas Fiskal dalam Kondisi Krisis</div>
+    <table>
+      <thead>
+        <tr><th>Dimensi</th><th>Program MBG (Kondisi Saat Ini)</th><th>Stabilisasi Harga BBM</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fiscal multiplier jangka pendek</td><td>Estimasi INDEF: 0,06% PDB per Rp 71T (berbasis model teoretis)</td><td>Menahan inflasi 1,3–1,5 pp = melindungi daya beli 270 juta penduduk secara langsung</td></tr>
+        <tr><td>Kecepatan transmisi ke daya beli</td><td>Lambat — 7,7 juta penerima (9% target) per Jul 2025</td><td>Instan — berlaku pada seluruh pengguna BBM hari yang sama</td></tr>
+        <tr><td>Basis bukti efektivitas</td><td>Belum ada evaluasi dampak terkontrol skala nasional</td><td>Terdokumentasi historis — kenaikan BBM Sep 2022 → inflasi 5,71% dalam 1 bulan</td></tr>
+        <tr><td>Tingkat kerentanan program</td><td>Tinggi — 10.000+ keracunan; tata kelola belum matang</td><td>Mekanisme subsidi sudah terinstitusionalisasi dan berpengalaman</td></tr>
+        <tr><td>Reversibilitas kebijakan</td><td>Penundaan MBG tidak merusak manfaat jangka panjang secara permanen</td><td>Kenaikan BBM sangat sulit dibalik (sticky prices) — berdampak permanen jangka pendek</td></tr>
+        <tr><td>Distribusi manfaat</td><td>Terkonsentrasi pada penerima tertentu (sasaran program)</td><td>Universal — mencakup seluruh lapisan masyarakat, terutama yang bergantung pada transportasi</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>VII.3 Kuantifikasi Realokasi: Berapa yang Diperlukan dan Apakah Realistis?</h3>
+
+  <p>Rekomendasi kebijakan tanpa kuantifikasi yang konkret adalah rekomendasi normatif yang lemah secara akademis. Bagian ini membangun kalkulasi yang spesifik untuk menjawab pertanyaan: berapa besar realokasi dari MBG yang diperlukan untuk mengcover selisih beban subsidi BBM, dan apakah angka tersebut realistis secara fiskal?</p>
+
+  <p>Berdasarkan skenario ICP $116/barel yang merupakan realitas aktual per akhir Maret 2026, deviasi dari asumsi APBN (+$46/barel) menghasilkan potensi tambahan beban subsidi ~Rp 312,8 triliun per tahun. Namun jika konflik mereda dalam 6 bulan dan ICP kembali ke kisaran $80/barel pada paruh kedua 2026, maka estimasi selisih beban subsidi selama satu tahun penuh akan berada di kisaran Rp 150–200 triliun. Dengan anggaran MBG RAPBN 2026 sebesar Rp 335 triliun, realokasi parsial yang diperlukan dapat dikalkulasi sebagai berikut:</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tabel 7.2 — Simulasi Realokasi Anggaran MBG untuk Stabilisasi Subsidi BBM</div>
+    <table>
+      <thead>
+        <tr><th>Skenario Konflik</th><th>Estimasi Selisih Beban Subsidi BBM (2026)</th><th>Realokasi MBG yang Diperlukan</th><th>Sisa Anggaran MBG</th><th>Feasibilitas</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Konflik selesai 3 bulan (Jun 2026)</td><td>~Rp 80–100 T</td><td>Rp 80–100 T</td><td>Rp 235–255 T</td><td><span class="badge badge-green">Sangat Feasibel</span></td></tr>
+        <tr><td>Konflik selesai 6 bulan (Sep 2026)</td><td>~Rp 150–200 T</td><td>Rp 150–200 T</td><td>Rp 135–185 T</td><td><span class="badge badge-green">Feasibel</span></td></tr>
+        <tr><td><strong>Konflik berlanjut setahun penuh</strong></td><td><strong>~Rp 312,8 T</strong></td><td><strong>Rp 200–250 T (realokasi parsial)</strong></td><td><strong>Rp 85–135 T</strong></td><td><span class="badge badge-orange">Layak dengan penyesuaian</span></td></tr>
+        <tr><td>Skenario eskalasi ($150/barel)</td><td>~Rp 544 T</td><td>Rp 300–335 T (seluruh MBG)</td><td>~Rp 0</td><td><span class="badge badge-red">Memerlukan sumber lain juga</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Tabel di atas menunjukkan bahwa untuk skenario yang paling realistis (konflik berlangsung 6–12 bulan pada kisaran $116/barel), realokasi Rp 200–250 triliun dari anggaran MBG sudah cukup untuk menutup selisih beban subsidi BBM — sambil tetap mempertahankan program MBG dalam skala yang lebih terkendali sekitar Rp 85–135 triliun. Ini bukan penghapusan MBG, melainkan <em>recalibration</em> ke skala yang proporsional dengan kapasitas implementasi aktual yang sudah terbukti.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Gambar 7.1 — Simulasi Realokasi: Kebutuhan Subsidi BBM vs Kapasitas Realokasi MBG</div>
+    <span class="chart-subtitle">Rp Triliun | Skenario konflik 6 bulan vs 12 bulan</span>
+    <div class="chart-canvas-wrap">
+      <canvas id="chartRealokasi"></canvas>
+    </div>
+    <div class="chart-source">Sumber: Kemenkeu RI (RAPBN 2026), kalkulasi penulis.</div>
+  </div>
+
+  <h3>VII.4 Desain Kebijakan: Dua Tahap Implementasi</h3>
+
+  <p>Rekomendasi ini dirancang dalam dua tahap yang mencerminkan dualitas tujuan: respons krisis jangka pendek dan reformasi tata kelola jangka menengah.</p>
+
+  <p><strong>Tahap Pertama — Emergency Fiscal Switching (0–12 bulan):</strong> Pemerintah melakukan realokasi parsial anggaran MBG RAPBN 2026 sebesar Rp 200–250 triliun untuk dialokasikan sebagai cadangan stabilisasi subsidi energi. Realokasi ini bersifat temporer dan terikat pada kondisi ICP yang melebihi asumsi APBN secara signifikan (trigger: ICP > $90/barel). Sisa anggaran MBG dipertahankan pada skala ~Rp 85–135 triliun dengan fokus pada peningkatan kualitas tata kelola, bukan ekspansi kuantitas penerima. Moratorium ekspansi MBG ke penerima baru diberlakukan hingga evaluasi dampak terkontrol tersedia. Kebijakan ini tidak menyentuh harga BBM bersubsidi — Pertalite dan Solar tetap di harga saat ini — sehingga tidak ada dampak inflasi langsung.</p>
+
+  <p><strong>Tahap Kedua — Reformasi Struktural (12–24 bulan):</strong> Pemerintah menugaskan lembaga independen (BRIN, akademisi) untuk melakukan evaluasi dampak MBG secara metodologis ketat menggunakan pendekatan quasi-experimental. Hasil evaluasi menjadi basis objektif untuk keputusan skala anggaran MBG tahun berikutnya — bukan logika politik. Bersamaan dengan itu, pemerintah mempercepat roadmap diversifikasi sumber energi dan pembangunan cadangan BBM strategis menuju standar IEA 90 hari, agar ketergantungan struktural pada Selat Hormuz dapat dikurangi secara bertahap.</p>
+
+  <h3>VII.5 Antisipasi Counter-Argumen</h3>
+
+  <p>Rekomendassi ini akan menghadapi beberapa counter-argumen yang perlu diantisipasi secara akademis. <em>Pertama</em>, argumen bahwa MBG memiliki multiplier ekonomi yang besar (INDEF memproyeksikan Rp 71T mendorong PDB Rp 4.510 triliun). Jawaban akademis: angka multiplier tersebut adalah proyeksi model berbasis asumsi yang belum divalidasi secara empiris pada skala nasional — ekstrapolasi dari pilot project ke 82,9 juta penerima dalam kondisi tata kelola yang belum matang mengandung asumsi yang secara metodologis lemah (Duflo & Banerjee, 2011). <em>Kedua</em>, argumen bahwa anak-anak yang stunting tidak bisa menunggu. Jawaban akademis: kenaikan harga BBM dalam kondisi <em>inflationary overhang</em> akan mendorong inflasi ke 6–7% dan menurunkan daya beli riil keluarga kuintil terbawah sebesar 3,5–4,8% — yang justru memperburuk kondisi gizi anak-anak dari keluarga yang sama yang ingin dilindungi oleh MBG. Membiarkan inflasi melonjak demi mempertahankan skala MBG adalah argumen yang secara internal inkonsisten. <em>Ketiga</em>, argumen moral hazard — bahwa realokasi ini mengirim sinyal lemahnya disiplin fiskal kepada investor. Jawaban: realokasi ini bukan pengabaian disiplin fiskal, melainkan ekspresi disiplin fiskal — karena alternatifnya adalah membiarkan defisit melampaui 3% PDB, yang jauh lebih destruktif terhadap kepercayaan pasar daripada <em>expenditure switching</em> yang terstruktur dan transparan.</p>
+</section>
+
+<!-- ══ SECTION VIII — KESIMPULAN ══ -->
+<section class="section" id="kesimpulan">
+  <div class="section-header">
+    <span class="section-num">BAGIAN VIII</span>
+    <h2>Kesimpulan</h2>
+  </div>
+
+  <p>Analisis ini telah membangun sebuah narasi empiris yang menyeluruh tentang bagaimana konflik US–Iran 2026 — melalui gangguan Selat Hormuz yang belum pernah terjadi dalam skala sebesar ini — menciptakan guncangan berlapis yang mengancam stabilitas perekonomian Indonesia secara simultan dari tiga arah: tekanan fiskal APBN, akselerasi inflasi domestik, dan pelemahan neraca pembayaran yang diperkuat oleh efek double blow nilai tukar.</p>
+
+  <p>Temuan utama yang perlu digarisbawahi adalah sebagai berikut. Pada level global, harga Brent telah melonjak 61% dalam 30 hari pertama konflik — dari $72 ke $116/barel — mencerminkan gangguan pada chokepoint yang menanggung 20% pasokan minyak dunia tanpa alternatif rerouting yang memadai. Pada level fiskal Indonesia, ICP aktual yang melampaui $116/barel berpotensi menambah defisit APBN ~Rp 312 triliun per tahun, mendorong total defisit ke kisaran 3,6% PDB — melampaui batas konstitusional 3%. Pada level inflasi, baseline inflasi Februari 2026 yang sudah berada di 4,76% menciptakan kondisi <em>inflationary overhang</em> yang membuat penyesuaian harga BBM apapun dalam kondisi ini akan menghasilkan puncak inflasi yang lebih tinggi daripada episode 2022 — dengan proyeksi mendekati 6–7% pasca-penyesuaian. Pada level struktural, cadangan BBM nasional hanya 20–26 hari — jauh di bawah standar IEA 90 hari — menjadikan Indonesia rentan bukan hanya terhadap shock harga, tetapi juga terhadap risiko kelangkaan fisik pasokan BBM jika gangguan Selat Hormuz berlanjut lebih dari satu bulan.</p>
+
+  <p>Dibandingkan dengan krisis energi 2022, situasi 2026 memiliki keunggulan semu pada level harga nominal (Brent $116 vs $128), namun secara struktural jauh lebih rentan: tidak ada windfall komoditas penyeimbang, gangguan terjadi pada chokepoint yang lebih kritis, dan Indonesia memulai krisis ini dari posisi inflasi baseline yang lebih tinggi. Kerentanan berlapis inilah yang menjustifikasi rekomendasi kebijakan yang tidak konvensional namun akademis dapat dipertahankan: strategi <em>emergency fiscal switching</em> berupa realokasi parsial anggaran MBG senilai Rp 200–250 triliun untuk menstabilkan subsidi BBM — sebuah respons yang melindungi daya beli 270 juta penduduk hari ini sambil membuka pintu bagi reformasi tata kelola MBG yang lebih bertanggung jawab secara evidensial untuk masa depan.</p>
+
+  <div class="callout callout-finding">
+    <span class="callout-label">Pernyataan Kesimpulan Utama</span>
+    <p>Konflik US–Iran 2026 bukan sekadar episode volatilitas harga energi yang akan berlalu — ia adalah stress test bagi ketahanan fiskal dan energi Indonesia yang mengekspos kerentanan struktural yang selama ini terpendam. Respons kebijakan yang tepat bukan hanya yang menyelesaikan krisis hari ini, tetapi yang sekaligus menggunakan momentum krisis sebagai <em>policy window</em> untuk memperbaiki kelemahan struktural yang memungkinkan kerentanan ini terakumulasi selama bertahun-tahun.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ REFERENSI ══ -->
+<section class="section" id="referensi">
+  <div class="section-header">
+    <span class="section-num">REF</span>
+    <h2>Daftar Pustaka</h2>
+  </div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;font-style:italic;">Format: APA 7th Edition. Disusun secara alfabetis berdasarkan nama pengarang pertama.</p>
+  <ul class="reference-list">
+    <li>Aizenman, J., Hutchison, M., & Noy, I. (2012). Inflation targeting and real exchange rates in emerging markets. <em>World Development, 39</em>(5), 712–724. https://doi.org/10.1016/j.worlddev.2010.11.009</li>
+    <li>Badan Pusat Statistik (BPS). (2024). <em>Survei Sosial Ekonomi Nasional (Susenas) 2024: Pengeluaran untuk konsumsi penduduk Indonesia</em>. BPS RI.</li>
+    <li>Badan Pusat Statistik (BPS). (2026, Maret). <em>Berita resmi statistik: Perkembangan indeks harga konsumen Februari 2026</em>. BPS RI.</li>
+    <li>Blanchard, O. J., & Galí, J. (2010). The macroeconomic effects of oil price shocks: Why are the 2000s so different from the 1970s? In J. Galí & M. J. Gertler (Eds.), <em>International dimensions of monetary policy</em> (pp. 373–421). University of Chicago Press.</li>
+    <li>Blanchard, O., & Leigh, D. (2013). Growth forecast errors and fiscal multipliers. <em>American Economic Review, 103</em>(3), 117–120. https://doi.org/10.1257/aer.103.3.117</li>
+    <li>Center for American Progress. (2026, March). <em>The economic impact of the US–Iran conflict on global energy markets</em>. CAP Report.</li>
+    <li>Coady, D., Flamini, V., & Sears, L. (2017). <em>The unequal benefits of fuel subsidies revisited: Evidence for developing countries</em> (IMF Working Paper WP/17/225). International Monetary Fund.</li>
+    <li>Cunado, J., & Perez de Gracia, F. (2005). Oil prices, economic activity and inflation: Evidence for some Asian countries. <em>Quarterly Review of Economics and Finance, 45</em>(1), 65–83.</li>
+    <li>Duflo, E., & Banerjee, A. V. (2011). <em>Poor economics: A radical rethinking of the way to fight global poverty</em>. PublicAffairs.</li>
+    <li>Energy Information Administration (EIA). (2025). <em>World oil transit chokepoints: Strait of Hormuz</em>. U.S. Department of Energy. https://www.eia.gov/international/analysis/special-topics/World_Oil_Transit_Chokepoints</li>
+    <li>European Central Bank (ECB). (2011). <em>Energy markets and the euro area macroeconomy</em> (Occasional Paper No. 113). ECB.</li>
+    <li>International Energy Agency (IEA). (2024). <em>Oil market report: December 2024</em>. IEA. https://www.iea.org/reports/oil-market-report</li>
+    <li>International Monetary Fund (IMF). (2020). <em>World economic outlook: A long and difficult ascent</em>. IMF. https://www.imf.org/en/Publications/WEO</li>
+    <li>Kementerian Energi dan Sumber Daya Mineral RI (ESDM). (2026, Maret). <em>Pernyataan resmi Menteri ESDM mengenai cadangan BBM nasional</em>. Kementerian ESDM RI.</li>
+    <li>Kementerian Keuangan RI (Kemenkeu). (2026). <em>Nota keuangan dan RAPBN 2026: Asumsi dasar ekonomi makro</em>. Kemenkeu RI.</li>
+    <li>Kpler. (2026, March). <em>Hormuz crude flow tracking: March 2026 update</em>. Kpler Analytics.</li>
+    <li>Krugman, P. R., & Obstfeld, M. (2018). <em>International economics: Theory and policy</em> (11th ed.). Pearson.</li>
+    <li>North, D. C. (2010). <em>Understanding the process of economic change</em>. Princeton University Press.</li>
+    <li>Peersman, G., & Van Robays, I. (2012). Cross-country differences in the effects of oil shocks. <em>Energy Economics, 34</em>(5), 1532–1547. https://doi.org/10.1016/j.eneco.2011.11.010</li>
+    <li>Pertamina. (2026, Maret 1). <em>Penyesuaian harga BBM non-subsidi per 1 Maret 2026</em>. PT Pertamina (Persero). https://www.pertamina.com</li>
+    <li>Pritchett, L., Woolcock, M., & Andrews, M. (2013). Looking like a state: Techniques of persistent failure in state capability for implementation. <em>Journal of Development Studies, 49</em>(1), 1–18.</li>
+    <li>Trading Economics. (2026). <em>Indonesia inflation rate — historical data 2020–2026</em>. https://tradingeconomics.com/indonesia/inflation-cpi</li>
+    <li>World Bank. (2023). <em>Indonesia poverty assessment: Towards a prosperous and inclusive Indonesia</em>. World Bank Group. https://openknowledge.worldbank.org</li>
+  </ul>
+</section>
+
+<div style="height:60px;"></div>
+</main>
+</div>
+
+<script>
+// Shared chart defaults
+Chart.defaults.font.family = "'Source Serif 4', Georgia, serif";
+Chart.defaults.color = '#3d4a5c';
+
+const NAVY = '#0d1b2a';
+const GOLD = '#c9a84c';
+const RED = '#c0392b';
+const GREEN = '#1a7a4a';
+const ORANGE = '#d68910';
+const BLUE = '#1a56db';
+const CREAM = '#f5f0e8';
+
+// ── CHART 1: Brent Price Timeline ──
+const ctxBrent = document.getElementById('chartBrent').getContext('2d');
+new Chart(ctxBrent, {
+  type: 'line',
+  data: {
+    labels: ['Jan 21','Jul 21','Jan 22','Apr 22\n(Puncak)','Jul 22','Jan 23','Jul 23','Jan 24','Jul 24','Jan 25','Jun 25','Des 25','Jan 26','28 Feb 26\n(Konflik)','8 Mar 26\n($100)','30 Mar 26\n($116)'],
+    datasets: [{
+      label: 'Harga Brent (USD/barel)',
+      data: [55, 72, 90, 128, 100, 82, 80, 82, 84, 72, 75, 62, 65, 82, 100, 116],
+      borderColor: GOLD,
+      backgroundColor: 'rgba(201,168,76,0.08)',
+      borderWidth: 2.5,
+      pointRadius: [3,3,3,6,3,3,3,3,3,3,3,3,3,6,6,8],
+      pointBackgroundColor: [GOLD,GOLD,GOLD,RED,GOLD,GOLD,GOLD,GOLD,GOLD,GOLD,GOLD,GOLD,GOLD,RED,RED,RED],
+      fill: true,
+      tension: 0.35
+    },{
+      label: 'Asumsi ICP APBN 2026 ($70)',
+      data: [70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70],
+      borderColor: GREEN,
+      borderWidth: 1.5,
+      borderDash: [6,3],
+      pointRadius: 0,
+      fill: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } },
+      tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { maxRotation: 35, font: { size: 10 } } },
+      y: {
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        title: { display: true, text: 'USD/barel', font: { size: 11 } },
+        min: 0, max: 145
+      }
+    }
+  }
+});
+
+// ── CHART 2: Defisit APBN ──
+const ctxDefisit = document.getElementById('chartDefisit').getContext('2d');
+new Chart(ctxDefisit, {
+  type: 'bar',
+  data: {
+    labels: ['Baseline\n($70)', 'Skenario\nRingan ($80)', 'Skenario\nSedang ($90)', 'Skenario\nKritis ($100)', 'Aktual Mar 2026\n($116)', 'Terburuk\n($150)'],
+    datasets: [{
+      label: 'Total Defisit Proyeksi (Rp T)',
+      data: [695, 763, 831, 899, 1007, 1239],
+      backgroundColor: [GREEN, ORANGE, ORANGE, RED, RED, '#7b241c'],
+      borderRadius: 3,
+    },{
+      type: 'line',
+      label: 'Batas Konstitusional 3% PDB (~Rp 833T)',
+      data: [833,833,833,833,833,833],
+      borderColor: RED,
+      borderWidth: 2,
+      borderDash: [5,4],
+      pointRadius: 0,
+      fill: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+      y: {
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        title: { display: true, text: 'Rp Triliun', font: { size: 11 } },
+        min: 500
+      }
+    }
+  }
+});
+
+// ── CHART 3: Inflasi ──
+const ctxInflasi = document.getElementById('chartInflasi').getContext('2d');
+new Chart(ctxInflasi, {
+  type: 'line',
+  data: {
+    labels: ['Jan 21','Jul 21','Jan 22','Apr 22','Sep 22\n(BBM naik)','Jan 23','Jul 23','Jan 24','Jul 24','Jan 25','Jul 25','Des 25','Jan 26','Feb 26'],
+    datasets: [{
+      label: 'Inflasi Indonesia (% y-o-y)',
+      data: [1.55, 1.68, 2.18, 3.47, 5.71, 5.28, 3.08, 2.57, 2.13, 2.65, 2.51, 2.92, 3.55, 4.76],
+      borderColor: NAVY,
+      backgroundColor: 'rgba(13,27,42,0.07)',
+      borderWidth: 2.5,
+      pointRadius: [3,3,3,4,8,4,3,3,3,3,3,3,4,5],
+      pointBackgroundColor: (ctx) => ctx.dataIndex === 4 ? RED : (ctx.dataIndex === 13 ? ORANGE : NAVY),
+      fill: true,
+      tension: 0.3
+    },{
+      label: 'Target BI Upper Bound (3,5%)',
+      data: [3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5],
+      borderColor: ORANGE,
+      borderWidth: 1.5,
+      borderDash: [5,4],
+      pointRadius: 0,
+      fill: false
+    },{
+      label: 'Target BI Lower Bound (1,5%)',
+      data: [1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5],
+      borderColor: GREEN,
+      borderWidth: 1.5,
+      borderDash: [5,4],
+      pointRadius: 0,
+      fill: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, padding: 14, font: { size: 11 } } }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } } },
+      y: {
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        title: { display: true, text: '% (year-on-year)', font: { size: 11 } },
+        min: 0, max: 8
+      }
+    }
+  }
+});
+
+// ── CHART 4: Dampak Regresif ──
+const ctxReg = document.getElementById('chartRegresif').getContext('2d');
+new Chart(ctxReg, {
+  type: 'bar',
+  data: {
+    labels: ['Kuintil 1\n(Termiskin)','Kuintil 2','Kuintil 3\n(Menengah)','Kuintil 4','Kuintil 5\n(Terkaya)'],
+    datasets: [{
+      label: '% Penurunan Daya Beli Riil (titik tengah)',
+      data: [4.15, 2.95, 2.25, 1.75, 1.35],
+      backgroundColor: [RED, ORANGE, '#e8a020', '#b8b020', GREEN],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ` -${ctx.parsed.x}% daya beli riil`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        title: { display: true, text: '% penurunan daya beli riil', font: { size: 11 } },
+        min: 0, max: 5
+      },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ── CHART 5: Radar ──
+const ctxRadar = document.getElementById('chartRadar').getContext('2d');
+new Chart(ctxRadar, {
+  type: 'radar',
+  data: {
+    labels: ['Skala gangguan\npasokan global','Kecepatan\neskalasi','Ketiadaan\nhindge fiskal','Tekanan\nnilai tukar','Baseline\ninflasi','Kerentanan\ncadangan BBM','Durasi\ngangguan'],
+    datasets: [{
+      label: 'Krisis Rusia–Ukraina 2022',
+      data: [4, 5, 3, 5, 4, 5, 7],
+      borderColor: BLUE,
+      backgroundColor: 'rgba(26,86,219,0.12)',
+      borderWidth: 2,
+      pointRadius: 4
+    },{
+      label: 'Konflik US–Iran 2026',
+      data: [9, 9, 8, 7, 8, 8, 5],
+      borderColor: RED,
+      backgroundColor: 'rgba(192,57,43,0.12)',
+      borderWidth: 2,
+      pointRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } } },
+    scales: {
+      r: {
+        min: 0, max: 10,
+        ticks: { stepSize: 2, font: { size: 9 } },
+        pointLabels: { font: { size: 10 } },
+        grid: { color: 'rgba(0,0,0,0.1)' },
+        angleLines: { color: 'rgba(0,0,0,0.1)' }
+      }
+    }
+  }
+});
+
+// ── CHART 6: Realokasi MBG ──
+const ctxReal = document.getElementById('chartRealokasi').getContext('2d');
+new Chart(ctxReal, {
+  type: 'bar',
+  data: {
+    labels: ['Anggaran MBG\nRAPBN 2026', 'Selisih Subsidi BBM\n(Konflik 6 bln)', 'Selisih Subsidi BBM\n(Konflik 12 bln)', 'Realokasi Diusulkan\n(200-250T)', 'Sisa Anggaran MBG\n(Setelah realokasi)'],
+    datasets: [{
+      label: 'Rp Triliun',
+      data: [335, 175, 313, 225, 110],
+      backgroundColor: [NAVY, RED, RED, GOLD, GREEN],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ` Rp ${ctx.parsed.y} Triliun`
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+      y: {
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        title: { display: true, text: 'Rp Triliun', font: { size: 11 } },
+        min: 0
+      }
+    }
+  }
+});
+
+// Highlight active nav on scroll
+const sections = document.querySelectorAll('section[id], div[id]');
+const navLinks = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
